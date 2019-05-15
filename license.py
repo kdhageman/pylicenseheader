@@ -46,11 +46,11 @@ def traversedir(dir, prefix, ext, license):
             traversedir(newdir, prefix, ext, license)
 
 def main():
-    parser = argparse.ArgumentParser(description="Add license to .go files")
+    parser = argparse.ArgumentParser(description="Add license to source code files")
     parser.add_argument('--header', type=str, default="./scripts/license/header.txt", help="Path to license header file")
-    parser.add_argument('--dir', type=str, default=".", help="Directory to traverse for .go files")
+    parser.add_argument('--dir', type=str, default=".", help="Directory to traverse for files")
     parser.add_argument('--header-prefix', type=str, default="//", help="Prefix to each line to comment out the license header")
-    parser.add_argument('--ext', type=str, defualt=".go", help="The file extension on which to filter files")
+    parser.add_argument('--ext', type=str, default=".go", help="The file extension on which to filter files")
     args = parser.parse_args()
 
     with open(args.header) as f:
