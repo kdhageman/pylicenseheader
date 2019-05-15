@@ -2,6 +2,7 @@
 import argparse
 import os
 
+
 def remove_header(prefix, lines):
     """
     Remove license header from content. Assumes that all lines (at the start of a files) that start with '//' are part of the license header
@@ -14,19 +15,20 @@ def remove_header(prefix, lines):
         if is_header:
             if not (line.startswith(prefix) or line.strip() == ""):
                 is_header = False
-                reslines += [ line ]
+                reslines += [line]
                 continue
         else:
-            reslines += [ line ]
+            reslines += [line]
     return reslines
 
-def traversedir(dir, prefix, ext, license):
+
+def traversedir(d, prefix, ext, license):
     """
     Traverses a directory recursively and adds the current license header to all Golang files
-    :param dir: the directory to traverse
+    :param d: the directory to traverse
     :param license: the content of the new license to write
     """
-    for _, subdirlist, filelist in os.walk(dir):
+    for dir, subdirlist, filelist in os.walk(d):
         for file in filelist:
             path = os.path.join(dir, file)
             root, curext = os.path.splitext(path)
@@ -45,17 +47,21 @@ def traversedir(dir, prefix, ext, license):
             newdir = os.path.join(dir, subdir)
             traversedir(newdir, prefix, ext, license)
 
+
 def main():
     parser = argparse.ArgumentParser(description="Add license to source code files")
-    parser.add_argument('--header', type=str, default="./scripts/license/header.txt", help="Path to license header file")
+    parser.add_argument('--header', type=str, default="./scripts/license/header.txt",
+                        help="Path to license header file")
     parser.add_argument('--dir', type=str, default=".", help="Directory to traverse for files")
-    parser.add_argument('--header-prefix', type=str, default="//", help="Prefix to each line to comment out the license header")
+    parser.add_argument('--header_prefix', type=str, default="//",
+                        help="Prefix to each line to comment out the license header")
     parser.add_argument('--ext', type=str, default=".go", help="The file extension on which to filter files")
     args = parser.parse_args()
 
     with open(args.header) as f:
         license = f.readlines()
-        traversedir(args.dir, args.prefix, args.ext, license)
+        traversedir(args.dir, args.header_prefix, args.ext, license)
+
 
 if __name__ == "__main__":
     main()
